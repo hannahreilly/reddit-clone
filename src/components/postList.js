@@ -1,7 +1,5 @@
 import React from 'react';
-import CreatePost from './components/createPost';
-import 'font-awesome/css/font-awesome.min.css';
-import PostList from './postList';
+
 
 const postList = (props) => {
   return (
