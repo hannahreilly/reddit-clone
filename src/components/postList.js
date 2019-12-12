@@ -1,0 +1,27 @@
+import React from 'react';
+import CreatePost from './components/createPost';
+import 'font-awesome/css/font-awesome.min.css';
+import PostList from './postList';
+
+const postList = (props) => {
+  return (
+      props.posts.map((post, key) =>
+        <div key={key} className={post.voteCount >= 0 ? "post-wrapper" : "post-wrapper post-wrapper-negative"}>
+          <h4>{post.title}</h4>
+          <p>{post.content}</p>
+          <p>{post.voteCount}</p>
+          <i
+            className="fa fa-angle-double-up"
+            onClick={(e) => props.vote(e, post, "plus")}>
+          </i>
+          <i
+            className="fa fa-angle-double-down"
+            onClick={(e) => props.vote(e, post, "minus")}>
+          </i>
+        </div>
+      )
+  )
+  
+}
+
+export default postList;
