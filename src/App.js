@@ -1,43 +1,91 @@
 import React from 'react';
 import './App.css';
+import CreatePost from './components/createPost'
 
 class App extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
+    this.state = {     
+      title: "",
       content: "",
-      posts: []
+      author: "Hannah Reilly",
+      voteCount: 0,
+      posts: [{
+        title: "this is a post",
+        content: "my post is good",
+        author: "Hannah Reilly",
+        voteCount: 0
+      }]
     }
   }
   
-  onChange = (e) => {
+  
+  onContentChange = (e) => {
     const content = e.target.value;
+    const name = e.target.name;
     this.setState({
-      content
+      [name]: content
     })
   }
 
   postSubmit = (e) => {
     e.preventDefault();
+    const posts = this.state.posts;
+    const newPost = {
+      author: this.state.author,
+      content: this.state.content,
+      title: this.state.title,
+      voteCount: 0
+    }
+    posts.push(newPost);
+
+    this.setState({
+      posts,
+      content: "",
+      title: ""
+    })
+  }
+
+  vote = (e, sentPost, operator) => {
+    e.preventDefault();
+    const posts = this.state.posts.filter(checkPost => sentPost.title !== checkPost.title);
+    switch (operator) {
+      case "plus":
+        sentPost.voteCount++
+        break;
+      case "minus":
+        sentPost.voteCount--
+        break;
+      default:
+        console.log("something terrible has happened")
+    }
+    this.setState({
+      posts: [...posts, sentPost]
+    })
   }
 
   render() {
+    console.log(this.state.posts);
     return (
       <div className="App">
-        <form onSubmit={this.postSubmit}>
-          <input
-            type="textarea"
-            name="content"
-            value={this.state.content}
-            placeholder="Post It"
-            onChange={this.onChange}
-          />
-          <input
-            type="submit"
-            value="post" 
-            />
-        </form>
+        <h1>Reddit</h1>
+        <CreatePost
+          postSubmit={this.postSubmit}
+          onContentChange={this.onContentChange}
+          titel={this.state.title}
+          content={this.state.content}
+        />
+          {this.state.posts.map((post, key) => 
+            <div key={key} className={post.voteCount >= 0 ? "post-wrapper" : "post-wrapper post-wrapper-negative"}>
+              <h4>{post.title}</h4>
+              <p>{post.content}</p>
+              <p>{post.voteCount}</p>
+              <button onClick ={(e) => this.vote(e,post, "plus")}>Vote Up!</button>
+              <button onClick={(e) => this.vote(e,post, "minus")}>Vote Down!</button>
+            </div>
+        )}  
+        
       </div>
     );
   }
