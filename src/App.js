@@ -1,6 +1,8 @@
 import React from 'react';
 import './App.css';
-import CreatePost from './components/createPost'
+import CreatePost from './components/createPost';
+import 'font-awesome/css/font-awesome.min.css';
+
 
 class App extends React.Component {
   constructor(props) {
@@ -60,8 +62,12 @@ class App extends React.Component {
       default:
         console.log("something terrible has happened")
     }
+
+    posts.push(sentPost);
+    posts.sort((a, b) => b.voteCount - a.voteCount);
+
     this.setState({
-      posts: [...posts, sentPost]
+      posts: posts
     })
   }
 
@@ -81,8 +87,14 @@ class App extends React.Component {
               <h4>{post.title}</h4>
               <p>{post.content}</p>
               <p>{post.voteCount}</p>
-              <button onClick ={(e) => this.vote(e,post, "plus")}>Vote Up!</button>
-              <button onClick={(e) => this.vote(e,post, "minus")}>Vote Down!</button>
+              <i
+                className= "fa fa-angle-double-up"
+                onClick={(e) => this.vote(e,post, "plus")}>
+              </i>
+              <i
+                className= "fa fa-angle-double-down"
+                onClick={(e) => this.vote(e,post, "minus")}>
+              </i>
             </div>
         )}  
         
